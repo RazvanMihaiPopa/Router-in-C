@@ -1,0 +1,26 @@
+For this assignment, i did the ICMP protocol and the Routing Process.
+
+
+Routing Process (Dirijarea Protocoalelor)
+
+For the implementation, i read the steps provided in the homework documentation and i
+used or made small changes to Laboratory 4 s functions. First, i check if ether_type 
+is Ipv4, then i verify if the router is the destination, by checking if the mac of the
+interface is equal to ether_dhost. If the package is ICMP (iphdr protocol field is set
+to 1), i send an ICMP message with type set to 0 and throw the packet (continue). I 
+verify the checksum, the TTL (if it s 1 or 0, send ICMP message with type 11 - time 
+exceeded, else decrease it), get the best_route using the laboratory linear function
+(if null, send icmp message with type 3 - destination unreachable).
+In the end, the destination address will be the mac address of the next hop, using the
+get_arp_entry function (equivalent to get_mac_entry from the laboratory), and the source
+address will be the mac address of the interface (using the get_interface_mac function).
+Finally, we send the packet on the best_route->interface.
+
+ICMP Protocol
+
+For this task, i created a function that sends a new package that contains the ethernet
+header with the dhost and shost swapped, then i added a new ip header with the updated 
+fields, and then i declared and added an icmp struct, filled the type variable with the
+type given (11 - Timeout, 3 - Destination unreachable, 0 - Echo Reply) and if it was 0
+i also filled the echo field. In the end i added the old IPV4 structand 64 bits from the
+original ICMP package.
